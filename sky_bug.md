@@ -51,5 +51,81 @@
 
 12. Functional Area (Drop down) -> 
 13. Assigned to (Drop down) -> 
+14. Comments (Text Area) -> 
+15. Status (Drop Down) -> Values[Open, Closed, Resolved]
+16. Priority (Assigned by Manager) -> Values[Fix immediately, Fix as soon as possible, Fix before next milestone, Fix before release, Fix if possible, Optional]
+17. Resolution & version (Drop Down) -> Values[]
+18. Resolved By (Drop down) -> Users
+19. Resolved Date ()
+18. Tested By (Drop down) -> User
+21. Tested Date ()
+
+
+
+BugReport(
+    id,
+    program_id (refers to ID in Program Table),
+    report_type,
+    severity,
+    attachment,
+    problem_summary,
+    is_reproducible,
+    description,
+    suggested_fix,
+    reported_by (refers to ID in User Table),
+    reported_date,
+    functional_area_id (refers to ID in Functional Area Table),
+    assigned_to (refers to ID in User Table),
+    comment,
+    status,
+    priority,
+    resolution,
+    resolved_by (refers to ID in User Table),
+    resolved_date,
+    tested_by (refers to ID in User Table),
+    tested_date
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#### Tables
+
+1. User (ID, )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
