@@ -1,4 +1,4 @@
-# SKY Bug Tracking Software:
+# SKY Bug Tracking Software::
 
 #### Testing Goals:
 1. Our testing will primarily be “black-box” with focus on correctly delivered functionality.
