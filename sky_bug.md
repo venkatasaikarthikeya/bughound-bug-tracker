@@ -61,9 +61,10 @@
 CREATE TABLE IF NOT EXISTS user(
     id INTEGER PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
+    user_role VARCHAR(255) NOT NULL,
     username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    UNIQUE(username)
+    UNIQUE (username)
 );
 ```
 
