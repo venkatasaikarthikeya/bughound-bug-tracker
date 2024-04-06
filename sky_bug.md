@@ -1,3 +1,4 @@
+<!--markdownlint-disable-->
 # SKY Bug Tracking Software:
 
 ### Testing Goals:
