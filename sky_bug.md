@@ -104,6 +104,7 @@ CREATE TABLE IF NOT EXISTS bug_report(
     severity VARCHAR(255) NOT NULL,
     summary VARCHAR(255) NOT NULL,
     is_reproducible BOOLEAN NOT NULL,
+    attachment TEXT,
     description TEXT,
     suggested_fix TEXT,
     reported_by INTEGER NOT NULL,
