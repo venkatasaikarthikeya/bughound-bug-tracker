@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms.widgets import PasswordInput, TextInput
-from .models import Program
+from .models import Program, FunctionalArea
 
 # Register/Create a user
 class CreateUserForm(UserCreationForm):
@@ -34,3 +34,16 @@ class UpdateProgramForm(forms.ModelForm):
         model = Program
         fields = ['name', 'version', 'release']
     
+
+# Create a Functional Area
+class CreateFunctionalAreaForm(forms.ModelForm):
+    class Meta:
+        model = FunctionalArea
+        fields = ['name', 'description']
+
+
+# Update a Functional Area
+class UpdateFunctionalAreaForm(forms.ModelForm):
+    class Meta:
+        model = FunctionalArea
+        fields = ['name', 'description']

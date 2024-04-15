@@ -1,0 +1,45 @@
+{% extends 'webapp/base.html' %}
+
+{% block content %}
+
+    <div class="card">
+
+        <strong>
+
+            <br>
+
+            &nbsp;  &nbsp; 
+
+            {{functionalArea.name}}
+
+            {{functionalArea.description}}
+
+        </strong>
+
+        <hr>
+
+        <div class="card-body">
+
+            <p> <strong> ID:  </strong> {{functionalArea.id}} </p> 
+
+            <p> <strong> NAME:  </strong> {{functionalArea.name}} </p> 
+
+            <p> <strong> DESCRIPTION:  </strong> {{functionalArea.description}} </p>
+
+        </div>
+
+    </div>
+
+    <br>
+
+    <a href="{% url 'functionalarea_list' %}" class="btn btn-primary"> Return </a>
+
+    &nbsp;
+
+    <a href="{% url 'update_functionalarea' functionalArea.id %}" class="btn btn-info"> Update </a>
+
+    &nbsp;
+
+    <a href="{% url 'delete_functionalarea' functionalArea.id %}" class="btn btn-danger"> Delete </a>
+
+{% endblock %}

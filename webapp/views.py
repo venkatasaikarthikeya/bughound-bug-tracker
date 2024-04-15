@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from .forms import CreateUserForm, LoginForm, CreateProgramForm, UpdateProgramForm
+from .forms import CreateFunctionalAreaForm, UpdateFunctionalAreaForm
 from django.contrib.auth.models import auth
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
-from .models import Program
+from .models import Program, FunctionalArea
 
 # Home page
 def home(request):
@@ -99,3 +100,53 @@ def delete_program(request, pk):
     program = Program.objects.get(id=pk)
     program.delete()
     return redirect("program_list")
+
+
+# Functional Area List
+@login_required(login_url='login')
+def functionalarea_list(request):
+    functionalAreas = FunctionalArea.objects.all()
+    context = {'functionalAreas': functionalAreas}
+    return render(request, 'webapp/functionalarea_list.html', context=context)
+
+
+@login_required(login_url='login')
+def create_functionalarea(request):
+    form = CreateFunctionalAreaForm()
+    if request.method == 'POST':
+        form = CreateFunctionalAreaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("functionalarea_list")
+    context = {'form': form}
+    return render(request, 'webapp/create_functionalarea.html', context=context)
+
+
+# Update Functional Area
+@login_required(login_url='login')
+def update_functionalarea(request, pk):
+    functionalArea = FunctionalArea.objects.get(id=pk)
+    form = UpdateFunctionalAreaForm(instance=functionalArea)
+    if request.method == 'POST':
+        form = UpdateFunctionalAreaForm(request.POST, instance=functionalArea)
+        if form.is_valid():
+            form.save()
+            return redirect("functionalarea_list")
+    context = {'form': form}
+    return render(request, 'webapp/update_functionalarea.html', context=context)
+
+
+# Read or View a singular Functional Area
+@login_required(login_url='login')
+def singular_functionalarea(request, pk):
+    functionalArea = FunctionalArea.objects.get(id=pk)
+    context = {'functionalArea': functionalArea}
+    return render(request, 'webapp/view_functionalarea.html', context=context)
+
+
+# Delete a Functional Area
+@login_required(login_url='login')
+def delete_functionalarea(request, pk):
+    functionalArea = FunctionalArea.objects.get(id=pk)
+    functionalArea.delete()
+    return redirect("functionalarea_list")

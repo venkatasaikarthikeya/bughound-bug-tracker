@@ -1,7 +1,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary justify-content-center">
 
-    <a class="navbar-brand main-heading" href="{% url '' %}"> 
+    <a class="navbar-brand main-heading" href="{% url 'create_functionalarea' %}"> 
             
       &nbsp; Sky Bugtracker
     
@@ -45,6 +45,16 @@
             <li class="nav-item">
         
               <a class="nav-link" href="{% url 'program_list' %}">Programs &nbsp; <i class="fa fa-tasks" aria-hidden="true"></i> </a>
+  
+            </li>
+
+
+            &nbsp;     &nbsp;     &nbsp; 
+
+
+            <li class="nav-item">
+        
+              <a class="nav-link" href="{% url 'functionalarea_list' %}">Functional Areas &nbsp; <i class="fa fa-users" aria-hidden="true"></i> </a>
   
             </li>
   

@@ -1,0 +1,54 @@
+{% extends 'webapp/base.html' %}
+
+{% block content %}
+
+    <h5> Manage your Functional Areas, {{user}}!</h5>
+
+    <hr>
+
+    <a class="btn btn-primary btn-sm" href="{% url 'create_functionalarea' %}">
+        <i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Create a new functional area
+    </a>
+
+    <hr>
+
+    <table class="table table-hover table-bordered">
+
+        <thead class="table-dark">
+
+            <tr>
+
+                <!--<th scope="col"> ID </th>-->
+                <th scope="col"> NAME </th>
+                <th scope="col"> DESCRIPTION </th>
+
+                <th scope="col"> VIEW </th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% if functionalAreas %}
+
+            {% for functionalArea in functionalAreas %}
+
+            <tr>
+                <!--<td> {{program.id}} </td>-->
+                <td> {{functionalArea.name}} </td>
+                <td> {{functionalArea.description}} </td>
+
+                <td> <a href="{% url 'functionalarea' functionalArea.id %}"> <i class="fa fa-eye" aria-hidden="true"> </i>  </a> </td>
+
+            </tr>
+
+            {% endfor %}
+        
+        {% endif %}
+
+        </tbody>
+
+    </table>
+
+{% endblock %}
