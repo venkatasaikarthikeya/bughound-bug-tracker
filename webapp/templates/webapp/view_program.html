@@ -1,0 +1,49 @@
+{% extends 'webapp/base.html' %}
+
+{% block content %}
+
+    <div class="card">
+
+        <strong>
+
+            <br>
+
+            &nbsp;  &nbsp; 
+
+            {{program.name}}
+
+            {{program.version}}
+
+            {{program.release}}
+
+        </strong>
+
+        <hr>
+
+        <div class="card-body">
+
+            <p> <strong> ID:  </strong> {{program.id}} </p> 
+
+            <p> <strong> NAME:  </strong> {{program.name}} </p> 
+
+            <p> <strong> VERSION:  </strong> {{program.version}} </p>
+
+            <p> <strong> RELEASE:  </strong> {{program.release}} </p>
+
+        </div>
+
+    </div>
+
+    <br>
+
+    <a href="{% url 'program_list' %}" class="btn btn-primary"> Return </a>
+
+    &nbsp;
+
+    <a href="{% url 'update_program' program.id %}" class="btn btn-info"> Update </a>
+
+    &nbsp;
+
+    <a href="{% url 'delete_program' program.id %}" class="btn btn-danger"> Delete </a>
+
+{% endblock %}
