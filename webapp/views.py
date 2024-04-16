@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
-from .forms import CreateUserForm, LoginForm, CreateProgramForm, UpdateProgramForm, CreateEmployeeForm, UpdateEmployeeForm
+from .forms import CreateUserForm, LoginForm, CreateProgramForm, UpdateProgramForm, CreateEmployeeForm, UpdateEmployeeForm, CreateBugReportForm, UpdateBugReportForm
 from .forms import CreateFunctionalAreaForm, UpdateFunctionalAreaForm
 from django.contrib.auth.models import auth, User
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
-from .models import Program, FunctionalArea, Employee
+from .models import Program, FunctionalArea, Employee, BugReport
 
 
 def set_user_session(request, contextDict):
@@ -59,10 +59,58 @@ def logout(request):
 # Dashboard
 @login_required(login_url='login')
 def dashboard(request):
-    context = {}
+    bugReports = BugReport.objects.all()
+    context = {'bugReports': bugReports}
     context = set_user_session(request, context)
     return render(request, 'webapp/dashboard.html', context=context)
 
+
+# Create Program
+@login_required(login_url='login')
+def create_bugreport(request):
+    form = CreateBugReportForm()
+    if request.method == 'POST':
+        form = CreateBugReportForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("dashboard")
+    context = {'form': form}
+    context = set_user_session(request, context)
+    return render(request, 'webapp/create_bugreport.html', context=context)
+
+
+# Read or View a singular Bug report
+@login_required(login_url='login')
+def singular_bugreport(request, pk):
+    bugReport = BugReport.objects.get(id=pk)
+    context = {'bugReport': bugReport}
+    context = set_user_session(request, context)
+    return render(request, 'webapp/view_bugreport.html', context=context)
+
+
+# Update Bug report
+@login_required(login_url='login')
+def update_bugreport(request, pk):
+    bugReport = BugReport.objects.get(id=pk)
+    form = UpdateBugReportForm(instance=bugReport)
+    if request.method == 'POST':
+        form = UpdateBugReportForm(request.POST, instance=bugReport)
+        if form.is_valid():
+            form.save()
+            return redirect("dashboard")
+    context = {'form': form}
+    context = set_user_session(request, context)
+    return render(request, 'webapp/update_bugreport.html', context=context)
+
+
+# Delete a Bug report
+@login_required(login_url='login')
+def delete_bugreport(request, pk):
+    bugReport = BugReport.objects.get(id=pk)
+    bugReport.delete()
+    context = {}
+    context = set_user_session(request, context)
+    return redirect("dashboard")
 
 # Program List
 @login_required(login_url='login')

@@ -6,7 +6,13 @@ urlpatterns = [
       path('register', views.register, name = "register"),
       path('login', views.login, name = "login"),
       path('logout', views.logout, name = "logout"),
+
+      # CRUD operations on BugReport
       path('dashboard', views.dashboard, name = "dashboard"),
+      path('bugreport/<int:pk>', views.singular_bugreport, name = "bugreport"),
+      path('create_bugreport', views.create_bugreport, name = "create_bugreport"),
+      path('update_bugreport/<int:pk>', views.update_bugreport, name = "update_bugreport"),
+      path('delete_bugreport/<int:pk>', views.delete_bugreport, name = "delete_bugreport"),
 
       # CRUD operations on Program
       path('program_list', views.program_list, name = "program_list"),

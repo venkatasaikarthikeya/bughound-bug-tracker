@@ -2,6 +2,57 @@
 
 {% block content %}
 
-    <h1> Welcome to the dashboard page! {{user}}</h1>
+    <h5> Bug Reports, {{employee.name}}!</h5>
+
+    <hr>
+
+    <a class="btn btn-primary btn-sm" href="{% url 'create_bugreport' %}">
+        <i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Create a new Bug Report
+    </a>
+
+    <hr>
+
+    <table class="table table-hover table-bordered">
+
+        <thead class="table-dark">
+
+            <tr>
+
+                <!--<th scope="col"> ID </th>-->
+                <th scope="col"> PROGRAM </th>
+                <th scope="col"> SUMMARY </th>
+                <th scope="col"> REPORTED BY </th>
+                <th scope="col"> STATUS </th>
+
+                <th scope="col"> VIEW </th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% if bugReports %}
+
+            {% for bugReport in bugReports %}
+
+            <tr>
+                <!--<td> {{program.id}} </td>-->
+                <td> {{bugReport.program}} </td>
+                <td> {{bugReport.problemSummary}} </td>
+                <td> {{bugReport.reportedBy}} </td>
+                <td> {{bugReport.status}} </td>
+
+                <td> <a href="{% url 'bugreport' bugReport.id %}"> <i class="fa fa-eye" aria-hidden="true"> </i>  </a> </td>
+
+            </tr>
+
+            {% endfor %}
+        
+        {% endif %}
+
+        </tbody>
+
+    </table>
 
 {% endblock %}
