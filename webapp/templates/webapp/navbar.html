@@ -57,6 +57,20 @@
               <a class="nav-link" href="{% url 'functionalarea_list' %}">Functional Areas &nbsp; <i class="fa fa-users" aria-hidden="true"></i> </a>
   
             </li>
+
+
+            {% if currentEmployee.role == 'Admin' %}
+
+            &nbsp;     &nbsp;     &nbsp; 
+
+
+            <li class="nav-item">
+        
+              <a class="nav-link" href="{% url 'employee_list' %}">Organization &nbsp; <i class="fa fa-building-o" aria-hidden="true"></i> </a>
+  
+            </li>
+
+            {% endif %}
   
   
             &nbsp;     &nbsp;     &nbsp;

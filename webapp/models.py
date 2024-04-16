@@ -1,4 +1,12 @@
 from django.db import models
+from django.contrib.auth.models import User
+
+
+roles = [
+    ('Admin', 'Admin'),
+    ('User', 'User'),
+    ('Manager', 'Manager')
+]
 
 
 class Program(models.Model):
@@ -21,3 +29,17 @@ class FunctionalArea(models.Model):
 
     def __str__(self):
         return self.name + '   ' + self.description
+    
+
+class Employee(models.Model):
+
+    name = models.CharField(max_length=100, default='')
+
+    email = models.CharField(max_length=100, default='')
+
+    role = models.CharField(max_length=100)
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name + '  ' + self.email + '  ' + self.role

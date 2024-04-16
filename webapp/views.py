@@ -1,10 +1,19 @@
 from django.shortcuts import render, redirect
-from .forms import CreateUserForm, LoginForm, CreateProgramForm, UpdateProgramForm
+from .forms import CreateUserForm, LoginForm, CreateProgramForm, UpdateProgramForm, CreateEmployeeForm, UpdateEmployeeForm
 from .forms import CreateFunctionalAreaForm, UpdateFunctionalAreaForm
-from django.contrib.auth.models import auth
+from django.contrib.auth.models import auth, User
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
-from .models import Program, FunctionalArea
+from .models import Program, FunctionalArea, Employee
+
+
+def set_user_session(request, contextDict):
+    currentUser = request.user
+    currentEmployee = Employee.objects.get(user=currentUser.id)
+    contextDict['currentUser'] = currentUser
+    contextDict['currentEmployee'] = currentEmployee
+    return contextDict
+
 
 # Home page
 def home(request):
@@ -17,7 +26,9 @@ def register(request):
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            emp_name = user.first_name + ' ' + user.last_name
+            emp = Employee.objects.create(user=user, name=emp_name, email=user.email, role='User')
             return redirect("login")
     context = {'form': form}
     return render(request, 'webapp/register.html', context=context)
@@ -48,7 +59,9 @@ def logout(request):
 # Dashboard
 @login_required(login_url='login')
 def dashboard(request):
-    return render(request, 'webapp/dashboard.html')
+    context = {}
+    context = set_user_session(request, context)
+    return render(request, 'webapp/dashboard.html', context=context)
 
 
 # Program List
@@ -56,6 +69,7 @@ def dashboard(request):
 def program_list(request):
     programs = Program.objects.all()
     context = {'programs': programs}
+    context = set_user_session(request, context)
     return render(request, 'webapp/program_list.html', context=context)
 
 
@@ -69,6 +83,7 @@ def create_program(request):
             form.save()
             return redirect("program_list")
     context = {'form': form}
+    context = set_user_session(request, context)
     return render(request, 'webapp/create_program.html', context=context)
 
 
@@ -83,6 +98,7 @@ def update_program(request, pk):
             form.save()
             return redirect("program_list")
     context = {'form': form}
+    context = set_user_session(request, context)
     return render(request, 'webapp/update_program.html', context=context)
 
 
@@ -91,6 +107,7 @@ def update_program(request, pk):
 def singular_program(request, pk):
     program = Program.objects.get(id=pk)
     context = {'program': program}
+    context = set_user_session(request, context)
     return render(request, 'webapp/view_program.html', context=context)
 
 
@@ -99,6 +116,8 @@ def singular_program(request, pk):
 def delete_program(request, pk):
     program = Program.objects.get(id=pk)
     program.delete()
+    context = {}
+    context = set_user_session(request, context)
     return redirect("program_list")
 
 
@@ -107,9 +126,11 @@ def delete_program(request, pk):
 def functionalarea_list(request):
     functionalAreas = FunctionalArea.objects.all()
     context = {'functionalAreas': functionalAreas}
+    context = set_user_session(request, context)
     return render(request, 'webapp/functionalarea_list.html', context=context)
 
 
+# Create Functional Area
 @login_required(login_url='login')
 def create_functionalarea(request):
     form = CreateFunctionalAreaForm()
@@ -119,6 +140,7 @@ def create_functionalarea(request):
             form.save()
             return redirect("functionalarea_list")
     context = {'form': form}
+    context = set_user_session(request, context)
     return render(request, 'webapp/create_functionalarea.html', context=context)
 
 
@@ -133,6 +155,7 @@ def update_functionalarea(request, pk):
             form.save()
             return redirect("functionalarea_list")
     context = {'form': form}
+    context = set_user_session(request, context)
     return render(request, 'webapp/update_functionalarea.html', context=context)
 
 
@@ -141,6 +164,7 @@ def update_functionalarea(request, pk):
 def singular_functionalarea(request, pk):
     functionalArea = FunctionalArea.objects.get(id=pk)
     context = {'functionalArea': functionalArea}
+    context = set_user_session(request, context)
     return render(request, 'webapp/view_functionalarea.html', context=context)
 
 
@@ -150,3 +174,58 @@ def delete_functionalarea(request, pk):
     functionalArea = FunctionalArea.objects.get(id=pk)
     functionalArea.delete()
     return redirect("functionalarea_list")
+
+
+# Employee List
+@login_required(login_url='login')
+def employee_list(request):
+    employees = Employee.objects.all()
+    context = {'employees': employees}
+    context = set_user_session(request, context)
+    return render(request, 'webapp/employee_list.html', context=context)
+
+
+# Create Employee
+@login_required(login_url='login')
+def create_employee(request):
+    form = CreateEmployeeForm()
+    if request.method == 'POST':
+        form = CreateEmployeeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("employee_list")
+    context = {'form': form}
+    context = set_user_session(request, context)
+    return render(request, 'webapp/create_employee.html', context=context)
+
+
+# Update Employee
+@login_required(login_url='login')
+def update_employee(request, pk):
+    employee = Employee.objects.get(id=pk)
+    form = UpdateEmployeeForm(instance=employee)
+    if request.method == 'POST':
+        form = UpdateEmployeeForm(request.POST, instance=employee)
+        if form.is_valid():
+            form.save()
+            return redirect("employee_list")
+    context = {'form': form}
+    context = set_user_session(request, context)
+    return render(request, 'webapp/update_employee.html', context=context)
+
+
+# Read or View a singular employee
+@login_required(login_url='login')
+def singular_employee(request, pk):
+    employee = Employee.objects.get(id=pk)
+    context = {'employee': employee}
+    context = set_user_session(request, context)
+    return render(request, 'webapp/view_employee.html', context=context)
+
+
+# Delete Employee
+@login_required(login_url='login')
+def delete_employee(request, pk):
+    employee = Employee.objects.get(id=pk)
+    employee.delete()
+    return redirect("employee_list")

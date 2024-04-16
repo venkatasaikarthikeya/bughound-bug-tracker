@@ -1,0 +1,49 @@
+{% extends 'webapp/base.html' %}
+
+{% block content %}
+
+    <div class="card">
+
+        <strong>
+
+            <br>
+
+            &nbsp;  &nbsp; 
+
+            {{employee.name}}
+
+            {{employee.email}}
+
+        </strong>
+
+        <hr>
+
+        <div class="card-body">
+
+            <!--<p> <strong> ID:  </strong> {{functionalArea.id}} </p> -->
+
+            <p> <strong> NAME:  </strong> {{employee.name}} </p> 
+
+            <p> <strong> EMAIL:  </strong> {{employee.email}} </p>
+
+            <p> <strong> USER:  </strong> {{employee.user.username}} </p>
+
+            <p> <strong> ROLE:  </strong> {{employee.role}} </p>
+
+        </div>
+
+    </div>
+
+    <br>
+
+    <a href="{% url 'employee_list' %}" class="btn btn-primary"> Return </a>
+
+    &nbsp;
+
+    <a href="{% url 'update_employee' employee.id %}" class="btn btn-info"> Update </a>
+
+    &nbsp;
+
+    <a href="{% url 'delete_employee' employee.id %}" class="btn btn-danger"> Delete </a>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'webapp/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <body>
+
+        <div class = "container bg-dark shadow-md rounded p-5 form-layout">
+            <h3> Update Employee </h3>
+            <h6> Update the details of the selected employee below. </h6>
+            <hr>
+            <br>
+            <form method="POST" autocomplete="off">
+                {% csrf_token %}
+                {{form|crispy}}
+                <br>
+                <button class="btn btn-primary w-100 btn-block p-2" type="submit"> Update Employee </button>
+            </form>
+            <br>
+        </div>
+        <br>
+        
+    </body>
+    
+{% endblock %}
