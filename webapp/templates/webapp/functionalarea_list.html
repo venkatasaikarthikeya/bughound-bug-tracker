@@ -20,7 +20,7 @@
 
                 <!--<th scope="col"> ID </th>-->
                 <th scope="col"> NAME </th>
-                <th scope="col"> DESCRIPTION </th>
+                <th scope="col"> PROGRAM </th>
 
                 <th scope="col"> VIEW </th>
 
@@ -37,7 +37,7 @@
             <tr>
                 <!--<td> {{program.id}} </td>-->
                 <td> {{functionalArea.name}} </td>
-                <td> {{functionalArea.description}} </td>
+                <td> {{functionalArea.program.name}} </td>
 
                 <td> <a href="{% url 'functionalarea' functionalArea.id %}"> <i class="fa fa-eye" aria-hidden="true"> </i>  </a> </td>
 

@@ -74,10 +74,10 @@ class FunctionalArea(models.Model):
     
     name = models.CharField(max_length=100)
 
-    description = models.TextField()
+    program = models.ForeignKey(Program, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return self.program.name + '-' + self.name
     
 # Entity: Employee
 class Employee(models.Model):

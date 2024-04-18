@@ -46,18 +46,22 @@ class UpdateProgramForm(forms.ModelForm):
 
 # Create a Functional Area
 class CreateFunctionalAreaForm(forms.ModelForm):
+    name = forms.CharField(widget=TextInput(), required=True)
+    program = forms.ModelChoiceField(queryset=Program.objects.all(), required=True)
     
     class Meta:
         model = FunctionalArea
-        fields = ['name', 'description']
+        fields = ['name', 'program']
 
 
 # Update a Functional Area
 class UpdateFunctionalAreaForm(forms.ModelForm):
+    name = forms.CharField(widget=TextInput(), required=True)
+    program = forms.ModelChoiceField(queryset=Program.objects.all(), required=True)
     
     class Meta:
         model = FunctionalArea
-        fields = ['name', 'description']
+        fields = ['name', 'program']
 
 
 # Create an Employee
