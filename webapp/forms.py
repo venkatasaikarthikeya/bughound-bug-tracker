@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms.widgets import PasswordInput, TextInput
 from .models import Program, FunctionalArea, Employee, BugReport
-from .models import roles, report_types, severities, resolutions, statuses, priorities
+from .models import levels, report_types, severities, resolutions, statuses, priorities
 
 
 # Register/Create a user
@@ -64,24 +64,24 @@ class UpdateFunctionalAreaForm(forms.ModelForm):
 class CreateEmployeeForm(forms.ModelForm):
     name = forms.CharField(widget=TextInput(), required=True, help_text="Employee Name")
     email = forms.CharField(widget=TextInput(), required=True, help_text="Employee Email")
-    role = forms.ChoiceField(choices=roles, required=True, help_text="Employee Role")
+    level = forms.ChoiceField(choices=levels, required=True, help_text="Employee Role")
     user = forms.ModelChoiceField(queryset=User.objects.all(), required=True, help_text="Employee User")
     
     class Meta:
         model = Employee
-        fields = ['name', 'email', 'role', 'user']
+        fields = ['name', 'email', 'level', 'user']
 
 
 # Update an Employee
 class UpdateEmployeeForm(forms.ModelForm):
     name = forms.CharField(widget=TextInput(), required=True, help_text="Employee Name")
     email = forms.CharField(widget=TextInput(), required=True, help_text="Employee Email")
-    role = forms.ChoiceField(choices=roles, required=True, help_text="Employee Role")
+    level = forms.ChoiceField(choices=levels, required=True, help_text="Employee Role")
     user = forms.ModelChoiceField(queryset=User.objects.all(), required=True, help_text="Employee User")
     
     class Meta:
         model = Employee
-        fields = ['name', 'email', 'role', 'user']
+        fields = ['name', 'email', 'level', 'user']
 
 
 # Create a Bug Report

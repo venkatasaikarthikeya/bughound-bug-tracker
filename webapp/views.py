@@ -28,7 +28,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             emp_name = user.first_name + ' ' + user.last_name
-            emp = Employee.objects.create(user=user, name=emp_name, email=user.email, role='User')
+            emp = Employee.objects.create(user=user, name=emp_name, email=user.email, level='1')
             return redirect("login")
     context = {'form': form}
     return render(request, 'webapp/register.html', context=context)

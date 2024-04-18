@@ -2,11 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-# [Admin, User, Manager]
-roles = [
-    ('Admin', 'Admin'),
-    ('User', 'User'),
-    ('Manager', 'Manager')
+# [1(low), 2(medium), 3(high)]
+levels = [
+    ('1', '1'),
+    ('2', '2'),
+    ('3', '3')
 ]
 
 # [Coding Error, Design Issue, Suggestion, Documentation, Hardware, Query]
@@ -86,7 +86,7 @@ class Employee(models.Model):
 
     email = models.CharField(max_length=100, default='')
 
-    role = models.CharField(max_length=100)
+    level = models.CharField(max_length=100)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
