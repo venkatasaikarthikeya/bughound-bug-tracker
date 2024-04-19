@@ -60,6 +60,13 @@ class UpdateFunctionalAreaForm(forms.ModelForm):
         model = FunctionalArea
         fields = ['name', 'program']
 
+class FunctionalAreaFilterForm(forms.Form):
+    program = forms.ModelChoiceField(queryset=Program.objects.all(), empty_label="All Programs", required=False)
+
+    class Meta:
+        model = FunctionalArea
+        fields = ['program']
+
 
 # Create an Employee
 class CreateEmployeeForm(forms.ModelForm):

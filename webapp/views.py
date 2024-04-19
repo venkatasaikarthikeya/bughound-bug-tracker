@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import CreateUserForm, LoginForm, CreateProgramForm, UpdateProgramForm, CreateEmployeeForm, UpdateEmployeeForm, CreateBugReportForm, UpdateBugReportForm
+from .forms import CreateUserForm, LoginForm, CreateProgramForm, UpdateProgramForm, CreateEmployeeForm, UpdateEmployeeForm, CreateBugReportForm, UpdateBugReportForm, FunctionalAreaFilterForm
 from .forms import CreateFunctionalAreaForm, UpdateFunctionalAreaForm
 from django.contrib.auth.models import auth, User
 from django.contrib.auth import authenticate
@@ -169,13 +169,27 @@ def delete_program(request, pk):
 #    context = set_user_session(request, context)
     return redirect("program_list")
 
-
+'''
 # Functional Area List
 @login_required(login_url='login')
 def functionalarea_list(request):
     functionalAreas = FunctionalArea.objects.all()
     context = {'functionalAreas': functionalAreas}
 #    context = set_user_session(request, context)
+    return render(request, 'webapp/functionalarea_list.html', context=context)
+'''
+
+@login_required(login_url='login')
+def functionalarea_list(request):
+    form = FunctionalAreaFilterForm(request.GET)
+    functionalAreas = FunctionalArea.objects.all()
+
+    if form.is_valid():
+        program = form.cleaned_data.get('program')
+        if program:
+            functionalAreas = functionalAreas.filter(program=program)
+
+    context = {'functionalAreas': functionalAreas, 'form': form}
     return render(request, 'webapp/functionalarea_list.html', context=context)
 
 

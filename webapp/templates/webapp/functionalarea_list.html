@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <h5> Manage your Functional Areas, !</h5>
+    <h5> Manage your Program Areas!</h5>
 
     <hr>
 
@@ -14,7 +14,17 @@
 
     <a class="btn btn-primary btn-sm" href="{% url 'export_area' %}">
         <i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Export Areas
-    </a>    
+    </a>  
+    
+    <hr>
+
+    <div class="col-md-6">
+        <!-- Filter form -->
+        <form class="form-inline" method="get">
+            {{ form.as_p }}
+            <button class="btn btn-primary" type="submit">Filter</button>
+        </form>
+    </div>
 
     <hr>
 
