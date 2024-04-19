@@ -5,7 +5,9 @@ from django.contrib.auth.models import auth, User
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from .models import Program, FunctionalArea, Employee, BugReport
-
+from django.core import serializers
+from django.http import HttpResponse
+from django.utils import timezone
 
 
 def set_user_session(request, contextDict):
@@ -14,7 +16,6 @@ def set_user_session(request, contextDict):
     contextDict['currentUser'] = currentUser
     contextDict['currentEmployee'] = currentEmployee
     return contextDict
-
 
 
 # Home page
@@ -54,7 +55,7 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return redirect("login")
-    
+
 
 # Dashboard
 @login_required(login_url='login')
@@ -178,6 +179,17 @@ def functionalarea_list(request):
     return render(request, 'webapp/functionalarea_list.html', context=context)
 
 
+# Export Area
+@login_required(login_url='login')
+def export_area(request):
+    timestamp = timezone.now().strftime('%Y-%m-%d_%H-%M-%S')
+    data = serializers.serialize("xml", FunctionalArea.objects.all())
+    data_with_timestamp = f'{data}<!-- Timestamp: {timestamp} -->\n'
+    response = HttpResponse(data_with_timestamp, content_type='text/xml')
+    response['Content-Disposition'] = 'attachment; filename="areas.xml"'
+    return response
+
+
 # Create Functional Area
 @login_required(login_url='login')
 def create_functionalarea(request):
@@ -285,3 +297,24 @@ def delete_employee(request, pk):
     User.objects.get(username=employee.loginID).delete()
     employee.delete()
     return redirect("employee_list")
+
+
+# Export Employee
+def export_employee(request):
+    employees = Employee.objects.all()
+    timestamp = timezone.now().strftime('%Y-%m-%d_%H-%M-%S')
+    L = []
+    L.append(f'<!-- Timestamp: {timestamp} -->\n')
+    for employee in employees:
+        s = str(employee.id) + ' ' + str(employee.name) + ' ' + str(employee.loginID) + ' ' + str(employee.level) + "\n"
+        for character in s:
+            L.append(str(ord(character)))
+    response = HttpResponse(''.join(L), content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename="employees.txt"'
+    # return render(request, 'bugtracker/export_employee.html')
+    # return response
+    # form = Employee.get_form()
+    # data = serializers.serialize("txt", Employee.objects.all())
+    # response = HttpResponse(data, content_type='text/txt')
+    # response['Content-Disposition'] = 'attachment; filename="areas.txt"'
+    return response

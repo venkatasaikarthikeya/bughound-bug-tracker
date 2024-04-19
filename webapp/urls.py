@@ -27,6 +27,7 @@ urlpatterns = [
       path('functionalarea/<int:pk>', views.singular_functionalarea, name = "functionalarea"),
       path('update_functionalarea/<int:pk>', views.update_functionalarea, name = "update_functionalarea"),
       path('delete_functionalarea/<int:pk>', views.delete_functionalarea, name = "delete_functionalarea"),
+      path('export_area', views.export_area, name='export_area'),
 
       # CRUD operations on Employee
       path('employee_list', views.employee_list, name = "employee_list"),
@@ -34,4 +35,5 @@ urlpatterns = [
       path('employee/<int:pk>', views.singular_employee, name = "employee"),
       path('update_employee/<int:pk>', views.update_employee, name = "update_employee"),
       path('delete_employee/<int:pk>', views.delete_employee, name = "delete_employee"),
+      path('export_employee', views.export_employee, name='export_employee'),
 ]
