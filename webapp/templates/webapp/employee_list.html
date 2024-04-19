@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <h5> Manage the employees, {{employee.name}}!</h5>
+    <h5> Manage the employees, !</h5>
 
     <hr>
 
@@ -20,9 +20,8 @@
 
                 <!--<th scope="col"> ID </th>-->
                 <th scope="col"> NAME </th>
-                <th scope="col"> EMAIL </th>
+                <th scope="col"> LOGIN ID </th>
                 <th scope="col"> LEVEL </th>
-                <th scope="col"> USERNAME </th>
 
                 <th scope="col"> VIEW </th>
 
@@ -39,9 +38,8 @@
             <tr>
                 <!--<td> {{program.id}} </td>-->
                 <td> {{emp.name}} </td>
-                <td> {{emp.email}} </td>
+                <td> {{emp.loginID}} </td>
                 <td> {{emp.level}} </td>
-                <td> {{emp.user.username}} </td>
 
                 <td> <a href="{% url 'employee' emp.id %}"> <i class="fa fa-eye" aria-hidden="true"> </i>  </a> </td>
 

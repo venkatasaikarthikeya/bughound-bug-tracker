@@ -1,7 +1,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary justify-content-center">
 
-    <a class="navbar-brand main-heading" href="{% url 'create_functionalarea' %}"> 
+    <a class="navbar-brand main-heading" href="{% url 'dashboard' %}"> 
             
       &nbsp; Sky Bugtracker
     
@@ -39,7 +39,7 @@
             </li>
 
 
-            {% if currentEmployee.level == '3' %}
+            
 
   
             &nbsp;     &nbsp;     &nbsp; 
@@ -70,7 +70,7 @@
   
             </li>
 
-            {% endif %}
+
   
   
             &nbsp;     &nbsp;     &nbsp;
@@ -87,12 +87,13 @@
   
         {% else %}
   
+        <!--
         <li class="nav-item">
   
           <a class="nav-link" href="{% url 'register' %}"> Register &nbsp; <i class="fa fa-user-plus" aria-hidden="true"></i> </a>
   
         </li>
-  
+        -->
   
         &nbsp;     &nbsp;     &nbsp; 
   

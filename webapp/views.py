@@ -7,12 +7,14 @@ from django.contrib.auth.decorators import login_required
 from .models import Program, FunctionalArea, Employee, BugReport
 
 
+'''
 def set_user_session(request, contextDict):
     currentUser = request.user
     currentEmployee = Employee.objects.get(user=currentUser.id)
     contextDict['currentUser'] = currentUser
     contextDict['currentEmployee'] = currentEmployee
     return contextDict
+'''
 
 
 # Home page
@@ -27,8 +29,6 @@ def register(request):
         form = CreateUserForm(request.POST)
         if form.is_valid():
             user = form.save()
-            emp_name = user.first_name + ' ' + user.last_name
-            emp = Employee.objects.create(user=user, name=emp_name, email=user.email, level='1')
             return redirect("login")
     context = {'form': form}
     return render(request, 'webapp/register.html', context=context)
@@ -39,13 +39,13 @@ def login(request):
     form = LoginForm()
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)
-        if form.is_valid():
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                auth.login(request, user)
-                return redirect("dashboard")
+        #if form.is_valid():
+        username = request.POST.get('username')
+        password = 'Bugtrack@1'
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            auth.login(request, user)
+            return redirect("dashboard")
     context = {'form': form}
     return render(request, 'webapp/login.html', context=context)
 
@@ -61,7 +61,7 @@ def logout(request):
 def dashboard(request):
     bugReports = BugReport.objects.all()
     context = {'bugReports': bugReports}
-    context = set_user_session(request, context)
+    # context = set_user_session(request, context)
     return render(request, 'webapp/dashboard.html', context=context)
 
 
@@ -75,7 +75,7 @@ def create_bugreport(request):
             form.save()
             return redirect("dashboard")
     context = {'form': form}
-    context = set_user_session(request, context)
+    # context = set_user_session(request, context)
     return render(request, 'webapp/create_bugreport.html', context=context)
 
 
@@ -84,7 +84,7 @@ def create_bugreport(request):
 def singular_bugreport(request, pk):
     bugReport = BugReport.objects.get(id=pk)
     context = {'bugReport': bugReport}
-    context = set_user_session(request, context)
+#    context = set_user_session(request, context)
     return render(request, 'webapp/view_bugreport.html', context=context)
 
 
@@ -99,7 +99,7 @@ def update_bugreport(request, pk):
             form.save()
             return redirect("dashboard")
     context = {'form': form}
-    context = set_user_session(request, context)
+#    context = set_user_session(request, context)
     return render(request, 'webapp/update_bugreport.html', context=context)
 
 
@@ -109,7 +109,7 @@ def delete_bugreport(request, pk):
     bugReport = BugReport.objects.get(id=pk)
     bugReport.delete()
     context = {}
-    context = set_user_session(request, context)
+#    context = set_user_session(request, context)
     return redirect("dashboard")
 
 # Program List
@@ -117,7 +117,7 @@ def delete_bugreport(request, pk):
 def program_list(request):
     programs = Program.objects.all()
     context = {'programs': programs}
-    context = set_user_session(request, context)
+#    context = set_user_session(request, context)
     return render(request, 'webapp/program_list.html', context=context)
 
 
@@ -131,7 +131,7 @@ def create_program(request):
             form.save()
             return redirect("program_list")
     context = {'form': form}
-    context = set_user_session(request, context)
+#    context = set_user_session(request, context)
     return render(request, 'webapp/create_program.html', context=context)
 
 
@@ -146,7 +146,7 @@ def update_program(request, pk):
             form.save()
             return redirect("program_list")
     context = {'form': form}
-    context = set_user_session(request, context)
+#    context = set_user_session(request, context)
     return render(request, 'webapp/update_program.html', context=context)
 
 
@@ -155,7 +155,7 @@ def update_program(request, pk):
 def singular_program(request, pk):
     program = Program.objects.get(id=pk)
     context = {'program': program}
-    context = set_user_session(request, context)
+#    context = set_user_session(request, context)
     return render(request, 'webapp/view_program.html', context=context)
 
 
@@ -165,7 +165,7 @@ def delete_program(request, pk):
     program = Program.objects.get(id=pk)
     program.delete()
     context = {}
-    context = set_user_session(request, context)
+#    context = set_user_session(request, context)
     return redirect("program_list")
 
 
@@ -174,7 +174,7 @@ def delete_program(request, pk):
 def functionalarea_list(request):
     functionalAreas = FunctionalArea.objects.all()
     context = {'functionalAreas': functionalAreas}
-    context = set_user_session(request, context)
+#    context = set_user_session(request, context)
     return render(request, 'webapp/functionalarea_list.html', context=context)
 
 
@@ -188,7 +188,7 @@ def create_functionalarea(request):
             form.save()
             return redirect("functionalarea_list")
     context = {'form': form}
-    context = set_user_session(request, context)
+#    context = set_user_session(request, context)
     return render(request, 'webapp/create_functionalarea.html', context=context)
 
 
@@ -203,7 +203,7 @@ def update_functionalarea(request, pk):
             form.save()
             return redirect("functionalarea_list")
     context = {'form': form}
-    context = set_user_session(request, context)
+ #   context = set_user_session(request, context)
     return render(request, 'webapp/update_functionalarea.html', context=context)
 
 
@@ -212,7 +212,7 @@ def update_functionalarea(request, pk):
 def singular_functionalarea(request, pk):
     functionalArea = FunctionalArea.objects.get(id=pk)
     context = {'functionalArea': functionalArea}
-    context = set_user_session(request, context)
+#    context = set_user_session(request, context)
     return render(request, 'webapp/view_functionalarea.html', context=context)
 
 
@@ -229,7 +229,7 @@ def delete_functionalarea(request, pk):
 def employee_list(request):
     employees = Employee.objects.all()
     context = {'employees': employees}
-    context = set_user_session(request, context)
+#    context = set_user_session(request, context)
     return render(request, 'webapp/employee_list.html', context=context)
 
 
@@ -240,10 +240,11 @@ def create_employee(request):
     if request.method == 'POST':
         form = CreateEmployeeForm(request.POST)
         if form.is_valid():
-            form.save()
+            employee = form.save()
+            User.objects.create_user(username=employee.loginID, password='Bugtrack@1')
             return redirect("employee_list")
     context = {'form': form}
-    context = set_user_session(request, context)
+#    context = set_user_session(request, context)
     return render(request, 'webapp/create_employee.html', context=context)
 
 
@@ -258,7 +259,7 @@ def update_employee(request, pk):
             form.save()
             return redirect("employee_list")
     context = {'form': form}
-    context = set_user_session(request, context)
+#    context = set_user_session(request, context)
     return render(request, 'webapp/update_employee.html', context=context)
 
 
@@ -267,7 +268,7 @@ def update_employee(request, pk):
 def singular_employee(request, pk):
     employee = Employee.objects.get(id=pk)
     context = {'employee': employee}
-    context = set_user_session(request, context)
+#    context = set_user_session(request, context)
     return render(request, 'webapp/view_employee.html', context=context)
 
 
@@ -275,5 +276,6 @@ def singular_employee(request, pk):
 @login_required(login_url='login')
 def delete_employee(request, pk):
     employee = Employee.objects.get(id=pk)
+    User.objects.get(username=employee.loginID).delete()
     employee.delete()
     return redirect("employee_list")

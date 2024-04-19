@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User
 
 
 # [1(low), 2(medium), 3(high)]
@@ -57,6 +56,14 @@ priorities = [
 ]
 
 
+# Entity: Login
+class Login(models.Model):
+    name = models.CharField(max_length=200, default='', null=False, blank=False)
+
+    def __str__(self):
+        return self.name
+
+
 # Entity: Program
 class Program(models.Model):
     
@@ -84,14 +91,12 @@ class Employee(models.Model):
 
     name = models.CharField(max_length=100, default='')
 
-    email = models.CharField(max_length=100, default='')
+    loginID = models.CharField(max_length=100, default='')
 
     level = models.CharField(max_length=100)
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
     def __str__(self):
-        return self.name + '-' + self.email
+        return self.name
 
 
 # Entity: Report

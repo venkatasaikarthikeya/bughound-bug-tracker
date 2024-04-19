@@ -2,26 +2,23 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from django.forms.widgets import PasswordInput, TextInput
-from .models import Program, FunctionalArea, Employee, BugReport
+from django.forms.widgets import PasswordInput, TextInput, HiddenInput
+from .models import Login, Program, FunctionalArea, Employee, BugReport
 from .models import levels, report_types, severities, resolutions, statuses, priorities
 
 
 # Register/Create a user
 class CreateUserForm(UserCreationForm):
-    email = forms.EmailField(widget=TextInput(), required=True, help_text="Your username")
-    first_name = forms.CharField(widget=TextInput(), required=True, help_text="Your first name")
-    last_name = forms.CharField(widget=TextInput(), required=True, help_text="Your last name")
     
     class Meta:
         model = User
-        fields = ['username', 'password1', 'password2', 'email', 'first_name', 'last_name', ]
+        fields = ['username', 'password1', 'password2']
 
 
 # Login a user
 class LoginForm(AuthenticationForm):
-    username = forms.CharField(widget=TextInput(), required=True, help_text="Your username")
-    password = forms.CharField(widget=PasswordInput(), required=True, help_text="Your password")
+    username = forms.CharField(label='Login ID', widget=TextInput(), required=True)
+    password = forms.CharField(widget=HiddenInput(), required=True, help_text="Your password")
     
     class Meta:
         model = User
@@ -67,25 +64,23 @@ class UpdateFunctionalAreaForm(forms.ModelForm):
 # Create an Employee
 class CreateEmployeeForm(forms.ModelForm):
     name = forms.CharField(widget=TextInput(), required=True, help_text="Employee Name")
-    email = forms.CharField(widget=TextInput(), required=True, help_text="Employee Email")
+    loginID = forms.CharField(widget=TextInput(), required=True, help_text="Employee Login ID")
     level = forms.ChoiceField(choices=levels, required=True, help_text="Employee Role")
-    user = forms.ModelChoiceField(queryset=User.objects.all(), required=True, help_text="Employee User")
     
     class Meta:
         model = Employee
-        fields = ['name', 'email', 'level', 'user']
+        fields = ['name', 'loginID', 'level']
 
 
 # Update an Employee
 class UpdateEmployeeForm(forms.ModelForm):
     name = forms.CharField(widget=TextInput(), required=True, help_text="Employee Name")
-    email = forms.CharField(widget=TextInput(), required=True, help_text="Employee Email")
+    loginID = forms.CharField(widget=TextInput(), required=True, help_text="Employee Login ID")
     level = forms.ChoiceField(choices=levels, required=True, help_text="Employee Role")
-    user = forms.ModelChoiceField(queryset=User.objects.all(), required=True, help_text="Employee User")
     
     class Meta:
         model = Employee
-        fields = ['name', 'email', 'level', 'user']
+        fields = ['name', 'loginID', 'level']
 
 
 # Create a Bug Report
