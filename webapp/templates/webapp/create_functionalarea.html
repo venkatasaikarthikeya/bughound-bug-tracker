@@ -6,19 +6,30 @@
 
     <body>
 
-        <div class = "container bg-dark shadow-md rounded p-5 form-layout">
-            <h3> Create Functional Area </h3>
-            <h6> Start adding in the required details for your Functional Area. </h6>
-            <hr>
-            <br>
-            <form method="POST" autocomplete="off">
-                {% csrf_token %}
-                {{form|crispy}}
+        {% if canBeCreated == True %}
+
+            <div class = "container bg-dark shadow-md rounded p-5 form-layout">
+                <h3> Create Functional Area </h3>
+                <h6> Start adding in the functional area for your programs </h6>
+                <hr>
                 <br>
-                <button class="btn btn-primary w-100 btn-block p-2" type="submit"> Create Functional Area </button>
-            </form>
-            <br>
-        </div>
+                <form method="POST" autocomplete="off">
+                    {% csrf_token %}
+                    {{form|crispy}}
+                    <br>
+                    <button class="btn btn-primary w-100 btn-block p-2" type="submit"> Create Functional Area </button>
+                </form>
+                <br>
+            </div>
+
+        {% else %}
+
+            <div class = "container bg-dark shadow-md rounded p-5 form-layout">
+                <h3> There are no programs at the moment. Add a program to create an Area. </h3>
+            </div>
+        
+        {% endif %}
+            
         <br>
         
     </body>

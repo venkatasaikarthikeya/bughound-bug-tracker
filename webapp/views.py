@@ -7,14 +7,14 @@ from django.contrib.auth.decorators import login_required
 from .models import Program, FunctionalArea, Employee, BugReport
 
 
-'''
+
 def set_user_session(request, contextDict):
     currentUser = request.user
-    currentEmployee = Employee.objects.get(user=currentUser.id)
+    currentEmployee = Employee.objects.get(loginID=currentUser.username)
     contextDict['currentUser'] = currentUser
     contextDict['currentEmployee'] = currentEmployee
     return contextDict
-'''
+
 
 
 # Home page
@@ -61,7 +61,7 @@ def logout(request):
 def dashboard(request):
     bugReports = BugReport.objects.all()
     context = {'bugReports': bugReports}
-    # context = set_user_session(request, context)
+    context = set_user_session(request, context)
     return render(request, 'webapp/dashboard.html', context=context)
 
 
@@ -188,7 +188,13 @@ def create_functionalarea(request):
             form.save()
             return redirect("functionalarea_list")
     context = {'form': form}
-#    context = set_user_session(request, context)
+    context = set_user_session(request, context)
+    canBeCreated = False
+    if len(Program.objects.all()) > 0:
+        canBeCreated = True
+    else:
+        context.pop('form')
+    context['canBeCreated'] = canBeCreated
     return render(request, 'webapp/create_functionalarea.html', context=context)
 
 
