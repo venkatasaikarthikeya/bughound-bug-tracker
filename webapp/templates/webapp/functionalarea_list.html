@@ -52,8 +52,8 @@
 
             <tr>
                 <!--<td> {{program.id}} </td>-->
-                <td> {{functionalArea.name}} </td>
-                <td> {{functionalArea.program.name}} </td>
+                <td> {{ functionalArea.name }} </td>
+                <td> {{ functionalArea.program.name }} - {{ functionalArea.program.version }} - {{ functionalArea.program.release }} </td>
 
                 <td> <a href="{% url 'functionalarea' functionalArea.id %}"> <i class="fa fa-eye" aria-hidden="true"> </i>  </a> </td>
 

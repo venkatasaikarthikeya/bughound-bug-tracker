@@ -84,7 +84,7 @@ class FunctionalArea(models.Model):
     program = models.ForeignKey(Program, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
-        return self.program.name + '-' + self.name
+        return self.program.name + '-' + self.program.version + '-' + self.program.release + '-' + self.name
     
 # Entity: Employee
 class Employee(models.Model):
