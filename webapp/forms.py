@@ -2,9 +2,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from django.forms.widgets import PasswordInput, TextInput, HiddenInput
+from django.forms.widgets import PasswordInput, TextInput, HiddenInput, Textarea
 from .models import Login, Program, FunctionalArea, Employee, BugReport
 from .models import levels, report_types, severities, resolutions, statuses, priorities
+from django.core.exceptions import ValidationError
 
 
 # Register/Create a user
@@ -60,6 +61,7 @@ class UpdateFunctionalAreaForm(forms.ModelForm):
         model = FunctionalArea
         fields = ['name', 'program']
 
+# Filter Functional Areas
 class FunctionalAreaFilterForm(forms.Form):
     program = forms.ModelChoiceField(queryset=Program.objects.all(), empty_label="All Programs", required=False)
 
@@ -92,27 +94,28 @@ class UpdateEmployeeForm(forms.ModelForm):
 
 # Create a Bug Report
 class CreateBugReportForm(forms.ModelForm):
-    program = forms.ModelChoiceField(queryset=Program.objects.all(), required=True, help_text="Program")
-    reportType = forms.ChoiceField(choices=report_types, required=True, help_text="Report Type")
-    severity = forms.ChoiceField(choices=severities, required=True, help_text="Severity")
-    attachment = forms.CharField(widget=TextInput(), required=False, help_text="Attachment")
-    problemSummary = forms.CharField(widget=TextInput(), required=True, help_text="Problem Summary")
-    isReproducible = forms.BooleanField(required=True, help_text="Is Reproducible")
-    problem = forms.CharField(widget=TextInput(), required=False, help_text="Problem")
-    suggestedFix = forms.CharField(widget=TextInput(), required=False, help_text="Suggested Fix")
-    reportedBy = forms.ModelChoiceField(queryset=Employee.objects.all(), required=True, help_text="Reported By")
-    reportedOn = forms.DateTimeField(required=True, help_text="Reported On")
-    functionalArea = forms.ModelChoiceField(queryset=FunctionalArea.objects.all(), required=False, help_text="Functional Area")
-    assignedTo = forms.ModelChoiceField(queryset=Employee.objects.all(), required=False, help_text="Assigned To")
-    comments = forms.CharField(widget=TextInput(), required=False, help_text="Comments")
-    status = forms.ChoiceField(choices=statuses, required=False, help_text="Status")
-    priority = forms.ChoiceField(choices=priorities, required=False, help_text="Priority")
-    resolution = forms.ChoiceField(choices=resolutions, required=False, help_text="Resolution")
-    resolvedBy = forms.ModelChoiceField(queryset=Employee.objects.all(), required=False, help_text="Resolved By")
-    resolvedOn = forms.DateTimeField(required=False, help_text="Resolved On")
-    testedBy = forms.ModelChoiceField(queryset=Employee.objects.all(), required=False, help_text="Tested By")
-    testedOn = forms.DateTimeField(required=False, help_text="Tested On")
-    isDeferred = forms.BooleanField(required=False, help_text="Is Deferred")
+    program = forms.ModelChoiceField(queryset=Program.objects.all(), required=True)
+    reportType = forms.ChoiceField(choices=report_types, required=True)
+    severity = forms.ChoiceField(choices=severities, required=True)
+    attachment = forms.CharField(widget=TextInput(), required=False)
+    isReproducible = forms.BooleanField(required=True)
+    problemSummary = forms.CharField(widget=TextInput(), required=True)
+    problem = forms.CharField(widget=Textarea(), required=True)
+    suggestedFix = forms.CharField(widget=TextInput(), required=False)
+    reportedBy = forms.ModelChoiceField(queryset=Employee.objects.all(), required=True)
+    reportedOn = forms.DateTimeField(widget=forms.DateInput(attrs={'type': 'date'}), required=True)
+    # Optional Fields
+    functionalArea = forms.ModelChoiceField(queryset=FunctionalArea.objects.all(), required=False)
+    assignedTo = forms.ModelChoiceField(queryset=Employee.objects.all(), required=False)
+    comments = forms.CharField(widget=TextInput(), required=False)
+    status = forms.ChoiceField(choices=statuses, required=False)
+    priority = forms.ChoiceField(choices=priorities, required=False)
+    resolution = forms.ChoiceField(choices=resolutions, required=False)
+    resolvedBy = forms.ModelChoiceField(queryset=Employee.objects.all(), required=False)
+    resolvedOn = forms.DateTimeField(widget=forms.DateInput(attrs={'type': 'date'}), required=False)
+    testedBy = forms.ModelChoiceField(queryset=Employee.objects.all(), required=False)
+    testedOn = forms.DateTimeField(widget=forms.DateInput(attrs={'type': 'date'}), required=False)
+    isDeferred = forms.BooleanField(required=False)
 
     class Meta:
         model = BugReport
@@ -121,28 +124,46 @@ class CreateBugReportForm(forms.ModelForm):
 
 # Update a Bug Report
 class UpdateBugReportForm(forms.ModelForm):
-    program = forms.ModelChoiceField(queryset=Program.objects.all(), required=True, help_text="Program")
-    reportType = forms.ChoiceField(choices=report_types, required=True, help_text="Report Type")
-    severity = forms.ChoiceField(choices=severities, required=True, help_text="Severity")
-    attachment = forms.CharField(widget=TextInput(), required=False, help_text="Attachment")
-    problemSummary = forms.CharField(widget=TextInput(), required=True, help_text="Problem Summary")
-    isReproducible = forms.BooleanField(required=True, help_text="Is Reproducible")
-    problem = forms.CharField(widget=TextInput(), required=False, help_text="Problem")
-    suggestedFix = forms.CharField(widget=TextInput(), required=False, help_text="Suggested Fix")
-    reportedBy = forms.ModelChoiceField(queryset=Employee.objects.all(), required=True, help_text="Reported By")
-    reportedOn = forms.DateTimeField(required=True, help_text="Reported On")
-    functionalArea = forms.ModelChoiceField(queryset=FunctionalArea.objects.all(), required=False, help_text="Functional Area")
-    assignedTo = forms.ModelChoiceField(queryset=Employee.objects.all(), required=False, help_text="Assigned To")
-    comments = forms.CharField(widget=TextInput(), required=False, help_text="Comments")
-    status = forms.ChoiceField(choices=statuses, required=False, help_text="Status")
-    priority = forms.ChoiceField(choices=priorities, required=False, help_text="Priority")
-    resolution = forms.ChoiceField(choices=resolutions, required=False, help_text="Resolution")
-    resolvedBy = forms.ModelChoiceField(queryset=Employee.objects.all(), required=False, help_text="Resolved By")
-    resolvedOn = forms.DateTimeField(required=False, help_text="Resolved On")
-    testedBy = forms.ModelChoiceField(queryset=Employee.objects.all(), required=False, help_text="Tested By")
-    testedOn = forms.DateTimeField(required=False, help_text="Tested On")
-    isDeferred = forms.BooleanField(required=False, help_text="Is Deferred")
+    program = forms.ModelChoiceField(queryset=Program.objects.all(), required=True)
+    reportType = forms.ChoiceField(choices=report_types, required=True)
+    severity = forms.ChoiceField(choices=severities, required=True)
+    attachment = forms.CharField(widget=TextInput(), required=False)
+    isReproducible = forms.BooleanField(required=True)
+    problemSummary = forms.CharField(widget=TextInput(), required=True)
+    problem = forms.CharField(widget=Textarea(), required=True)
+    suggestedFix = forms.CharField(widget=TextInput(), required=False)
+    reportedBy = forms.ModelChoiceField(queryset=Employee.objects.all(), required=True)
+    reportedOn = forms.DateTimeField(widget=forms.DateInput(attrs={'type': 'date'}), required=True)
+    # Optional Fields
+    functionalArea = forms.ModelChoiceField(queryset=FunctionalArea.objects.all(), required=False)
+    assignedTo = forms.ModelChoiceField(queryset=Employee.objects.all(), required=False)
+    comments = forms.CharField(widget=TextInput(), required=False)
+    status = forms.ChoiceField(choices=statuses, required=False)
+    priority = forms.ChoiceField(choices=priorities, required=False)
+    resolution = forms.ChoiceField(choices=resolutions, required=False)
+    resolvedBy = forms.ModelChoiceField(queryset=Employee.objects.all(), required=False)
+    resolvedOn = forms.DateTimeField(widget=forms.DateInput(attrs={'type': 'date'}), required=False)
+    testedBy = forms.ModelChoiceField(queryset=Employee.objects.all(), required=False)
+    testedOn = forms.DateTimeField(widget=forms.DateInput(attrs={'type': 'date'}), required=False)
+    isDeferred = forms.BooleanField(required=False)
 
     class Meta:
         model = BugReport
         fields = ['program', 'reportType', 'severity', 'attachment', 'problemSummary', 'isReproducible', 'problem', 'suggestedFix', 'reportedBy', 'reportedOn', 'functionalArea', 'assignedTo', 'comments', 'status', 'priority', 'resolution', 'resolvedBy', 'resolvedOn', 'testedBy', 'testedOn', 'isDeferred']
+
+
+# Filter Bug Reports
+class BugReportFilterForm(forms.Form):
+    program = forms.ModelChoiceField(queryset=Program.objects.all(), empty_label="All Programs", required=False)
+    #reportType = forms.ChoiceField(choices=report_types, required=False)
+    severity = forms.ChoiceField(choices=severities, required=False)
+    #functionalArea = forms.ModelChoiceField(queryset=FunctionalArea.objects.all(), empty_label="All Areas", required=False)
+    #status = forms.ChoiceField(choices=statuses, required=False)
+    #priority = forms.ChoiceField(choices=priorities, required=False)
+    reportedBy = forms.ModelChoiceField(queryset=Employee.objects.all(), empty_label="Any Employee", required=False)
+    #assignedTo = forms.ModelChoiceField(queryset=Employee.objects.all(), empty_label="All Employees", required=False)
+    #resolvedBy = forms.ModelChoiceField(queryset=Employee.objects.all(), empty_label="All Employees", required=False)
+
+    class Meta:
+        model = BugReport
+        fields = ['program', 'severity', 'reportedBy']

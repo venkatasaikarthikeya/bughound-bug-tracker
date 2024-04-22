@@ -10,6 +10,7 @@ levels = [
 
 # [Coding Error, Design Issue, Suggestion, Documentation, Hardware, Query]
 report_types = [
+    ('Select', 'Select'),
     ('Coding Error', 'Coding Error'),
     ('Design Issue', 'Design Issue'),
     ('Suggestion', 'Suggestion'),
@@ -20,6 +21,7 @@ report_types = [
 
 # [Minor, Serious, Fatal]
 severities = [
+    ('Select', 'Select'),
     ('Minor', 'Minor'),
     ('Serious', 'Serious'),
     ('Fatal', 'Fatal')

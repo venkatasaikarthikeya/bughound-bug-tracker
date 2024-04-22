@@ -42,8 +42,12 @@
 
     <a href="{% url 'update_bugreport' bugReport.id %}" class="btn btn-info"> Update </a>
 
-    &nbsp;
+    {% if currentEmployee.level == '3' %}
+    
+        &nbsp;
 
-    <a href="{% url 'delete_bugreport' bugReport.id %}" class="btn btn-danger"> Delete </a>
+        <a href="{% url 'delete_bugreport' bugReport.id %}" class="btn btn-danger"> Delete </a>
+    
+    {% endif %}
 
 {% endblock %}

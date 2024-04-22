@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import CreateUserForm, LoginForm, CreateProgramForm, UpdateProgramForm, CreateEmployeeForm, UpdateEmployeeForm, CreateBugReportForm, UpdateBugReportForm, FunctionalAreaFilterForm
+from .forms import CreateUserForm, LoginForm, CreateProgramForm, UpdateProgramForm, CreateEmployeeForm, UpdateEmployeeForm, CreateBugReportForm, UpdateBugReportForm, FunctionalAreaFilterForm, BugReportFilterForm
 from .forms import CreateFunctionalAreaForm, UpdateFunctionalAreaForm
 from django.contrib.auth.models import auth, User
 from django.contrib.auth import authenticate
@@ -8,6 +8,7 @@ from .models import Program, FunctionalArea, Employee, BugReport
 from django.core import serializers
 from django.http import HttpResponse
 from django.utils import timezone
+from django import forms
 
 
 def set_user_session(request, contextDict):
@@ -60,10 +61,84 @@ def logout(request):
 # Dashboard
 @login_required(login_url='login')
 def dashboard(request):
+    form = BugReportFilterForm(request.GET)
     bugReports = BugReport.objects.all()
-    context = {'bugReports': bugReports}
+
+    if form.is_valid():
+        
+        # Filter by program
+        program = form.cleaned_data.get('program')
+        if program:
+            bugReports = bugReports.filter(program=program)
+
+        # Filter by severity
+        severity = form.cleaned_data.get('severity')
+        if severity and severity != 'Select':
+            bugReports = bugReports.filter(severity=severity)
+
+        # Filter by reported by
+        reportedBy = form.cleaned_data.get('reportedBy')
+        if reportedBy and reportedBy != 'Any Employee':
+            bugReports = bugReports.filter(reportedBy=reportedBy)
+
+        '''
+        # Filter by report type
+        reportType = form.cleaned_data.get('reportType')
+        if reportType:
+            bugReports = bugReports.filter(reportType=reportType)
+
+        
+
+        # Filter by functional area
+        functionalArea = form.cleaned_data.get('functionalArea')
+        if functionalArea:
+            bugReports = bugReports.filter(functionalArea=functionalArea)
+        
+        # Filter by status
+        status = form.cleaned_data.get('status')
+        if status:
+            bugReports = bugReports.filter(status=status)
+        
+        # Filter by priority
+        priority = form.cleaned_data.get('priority')
+        if priority:
+            bugReports = bugReports.filter(priority=priority)
+
+
+        # Filter by assigned to
+        assignedTo = form.cleaned_data.get('assignedTo')
+        if assignedTo:
+            bugReports = bugReports.filter(assignedTo=assignedTo)
+
+        # Filter by resolved by
+        resolvedBy = form.cleaned_data.get('resolvedBy')
+        if resolvedBy:
+            bugReports = bugReports.filter(resolvedBy=resolvedBy)
+        '''
+
+    context = {'bugReports': bugReports, 'form': form}
     context = set_user_session(request, context)
     return render(request, 'webapp/dashboard.html', context=context)
+
+
+def control_form_visibility(form, request):
+    currentUser = request.user
+    currentEmployee = Employee.objects.get(loginID=currentUser.username)
+    if currentEmployee.level == '1':
+        form.fields['functionalArea'].widget = forms.HiddenInput()
+        form.fields['assignedTo'].widget = forms.HiddenInput()
+        form.fields['comments'].widget = forms.HiddenInput()
+        form.fields['status'].widget = forms.HiddenInput()
+        form.fields['priority'].widget = forms.HiddenInput()
+        form.fields['resolution'].widget = forms.HiddenInput()
+        form.fields['resolvedBy'].widget = forms.HiddenInput()
+        form.fields['resolvedOn'].widget = forms.HiddenInput()
+        form.fields['testedBy'].widget = forms.HiddenInput()
+        form.fields['testedOn'].widget = forms.HiddenInput()
+        form.fields['isDeferred'].widget = forms.HiddenInput()
+    # Un hide this field when attachment is implemented
+    form.fields['attachment'].widget = forms.HiddenInput()
+    return form
 
 
 # Create Program
@@ -75,8 +150,9 @@ def create_bugreport(request):
         if form.is_valid():
             form.save()
             return redirect("dashboard")
+    form = control_form_visibility(form, request)
     context = {'form': form}
-    # context = set_user_session(request, context)
+    context = set_user_session(request, context)
     return render(request, 'webapp/create_bugreport.html', context=context)
 
 
@@ -85,7 +161,7 @@ def create_bugreport(request):
 def singular_bugreport(request, pk):
     bugReport = BugReport.objects.get(id=pk)
     context = {'bugReport': bugReport}
-#    context = set_user_session(request, context)
+    context = set_user_session(request, context)
     return render(request, 'webapp/view_bugreport.html', context=context)
 
 
@@ -99,8 +175,9 @@ def update_bugreport(request, pk):
         if form.is_valid():
             form.save()
             return redirect("dashboard")
+    form = control_form_visibility(form, request)
     context = {'form': form}
-#    context = set_user_session(request, context)
+    context = set_user_session(request, context)
     return render(request, 'webapp/update_bugreport.html', context=context)
 
 

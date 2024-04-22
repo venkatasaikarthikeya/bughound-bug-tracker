@@ -6,7 +6,19 @@
 
     {% if currentEmployee.level == '1' %}
 
-        <h3> No DB Access. But, you can create Bug Reports!</h3>
+        <h3> No DB Access. But, you can create and view Bug Reports!</h3>
+
+        <hr>
+
+        <a class="btn btn-primary btn-sm" href="{% url 'create_bugreport' %}">
+            <i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Create a new Bug Report
+        </a>
+    
+        <hr>
+
+    {% elif currentEmployee.level == '2' %}
+
+        <h3> No DB Access. But, you can create a Bug Reports or update existing Bug Reports! </h3>
 
         <hr>
 
@@ -30,51 +42,57 @@
 
     {% endif %}
 
-    {% if currentEmployee.level != '1' %}
-    
-        <table class="table table-hover table-bordered">
+    <div class="col-md-6">
+        <!-- Filter form -->
+        <form class="form-inline" method="get">
+            {{ form.as_p }}
+            <button class="btn btn-primary" type="submit">Filter</button>
+        </form>
+    </div>
 
-            <thead class="table-dark">
+    <hr>
 
-                <tr>
+    <table class="table table-hover table-bordered">
 
-                    <!--<th scope="col"> ID </th>-->
-                    <th scope="col"> PROGRAM </th>
-                    <th scope="col"> SUMMARY </th>
-                    <th scope="col"> REPORTED BY </th>
-                    <th scope="col"> STATUS </th>
+        <thead class="table-dark">
 
-                    <th scope="col"> VIEW </th>
+            <tr>
 
-                </tr>
+                <!--<th scope="col"> ID </th>-->
+                <th scope="col"> PROGRAM </th>
+                <th scope="col"> SUMMARY </th>
+                <th scope="col"> REPORTED BY </th>
+                <th scope="col"> SEVERITY </th>
 
-            </thead>
+                <th scope="col"> VIEW </th>
 
-            <tbody>
+            </tr>
 
-            {% if bugReports %}
+        </thead>
 
-                {% for bugReport in bugReports %}
+        <tbody>
 
-                <tr>
-                    <!--<td> {{program.id}} </td>-->
-                    <td> {{bugReport.program}} </td>
-                    <td> {{bugReport.problemSummary}} </td>
-                    <td> {{bugReport.reportedBy}} </td>
-                    <td> {{bugReport.status}} </td>
+        {% if bugReports %}
 
-                    <td> <a href="{% url 'bugreport' bugReport.id %}"> <i class="fa fa-eye" aria-hidden="true"> </i>  </a> </td>
+            {% for bugReport in bugReports %}
 
-                </tr>
+            <tr>
+                <!--<td> {{program.id}} </td>-->
+                <td> {{bugReport.program}} </td>
+                <td> {{bugReport.problemSummary}} </td>
+                <td> {{bugReport.reportedBy}} </td>
+                <td> {{bugReport.severity}} </td>
 
-                {% endfor %}
-            
-            {% endif %}
+                <td> <a href="{% url 'bugreport' bugReport.id %}"> <i class="fa fa-eye" aria-hidden="true"> </i>  </a> </td>
 
-            </tbody>
+            </tr>
 
-        </table>
+            {% endfor %}
+        
+        {% endif %}
 
-    {% endif %}
+        </tbody>
+
+    </table>
 
 {% endblock %}
