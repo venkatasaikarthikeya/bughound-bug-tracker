@@ -12,6 +12,7 @@ urlpatterns = [
       path('bugreport/<int:pk>', views.singular_bugreport, name = "bugreport"),
       path('create_bugreport', views.create_bugreport, name = "create_bugreport"),
       path('update_bugreport/<int:pk>', views.update_bugreport, name = "update_bugreport"),
+      path('view_attachment/<int:pk>', views.view_attachment, name = "view_attachment"),
       path('delete_bugreport/<int:pk>', views.delete_bugreport, name = "delete_bugreport"),
 
       # CRUD operations on Program

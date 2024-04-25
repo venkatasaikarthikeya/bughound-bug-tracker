@@ -11,7 +11,7 @@
             <h6> Update the details of the selected bug report below. </h6>
             <hr>
             <br>
-            <form method="POST" autocomplete="off">
+            <form method="POST" autocomplete="off" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{form|crispy}}
                 <br>

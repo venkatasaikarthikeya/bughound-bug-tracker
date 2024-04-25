@@ -11,7 +11,7 @@
             <h6> Start adding in the required details for submitting a bug report. </h6>
             <hr>
             <br>
-            <form method="POST" autocomplete="off">
+            <form method="POST" autocomplete="off" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{form|crispy}}
                 <br>

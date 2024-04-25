@@ -97,7 +97,7 @@ class CreateBugReportForm(forms.ModelForm):
     program = forms.ModelChoiceField(queryset=Program.objects.all(), required=True)
     reportType = forms.ChoiceField(choices=report_types, required=True)
     severity = forms.ChoiceField(choices=severities, required=True)
-    attachment = forms.CharField(widget=TextInput(), required=False)
+    attachment = forms.FileField(widget=forms.FileInput(attrs={'class': 'form-control'}), required=False)
     isReproducible = forms.BooleanField(required=True)
     problemSummary = forms.CharField(widget=TextInput(), required=True)
     problem = forms.CharField(widget=Textarea(), required=True)
@@ -127,7 +127,7 @@ class UpdateBugReportForm(forms.ModelForm):
     program = forms.ModelChoiceField(queryset=Program.objects.all(), required=True)
     reportType = forms.ChoiceField(choices=report_types, required=True)
     severity = forms.ChoiceField(choices=severities, required=True)
-    attachment = forms.CharField(widget=TextInput(), required=False)
+    attachment = forms.FileField(widget=forms.FileInput(attrs={'class': 'form-control'}), required=False)
     isReproducible = forms.BooleanField(required=True)
     problemSummary = forms.CharField(widget=TextInput(), required=True)
     problem = forms.CharField(widget=Textarea(), required=True)
@@ -158,12 +158,12 @@ class BugReportFilterForm(forms.Form):
     #reportType = forms.ChoiceField(choices=report_types, required=False)
     severity = forms.ChoiceField(choices=severities, required=False)
     #functionalArea = forms.ModelChoiceField(queryset=FunctionalArea.objects.all(), empty_label="All Areas", required=False)
-    #status = forms.ChoiceField(choices=statuses, required=False)
+    status = forms.ChoiceField(choices=statuses, required=False)
     #priority = forms.ChoiceField(choices=priorities, required=False)
     reportedBy = forms.ModelChoiceField(queryset=Employee.objects.all(), empty_label="Any Employee", required=False)
-    #assignedTo = forms.ModelChoiceField(queryset=Employee.objects.all(), empty_label="All Employees", required=False)
+    assignedTo = forms.ModelChoiceField(queryset=Employee.objects.all(), empty_label="All Employees", required=False)
     #resolvedBy = forms.ModelChoiceField(queryset=Employee.objects.all(), empty_label="All Employees", required=False)
 
     class Meta:
         model = BugReport
-        fields = ['program', 'severity', 'reportedBy']
+        fields = ['program', 'severity', 'reportedBy', 'status', 'assignedTo']

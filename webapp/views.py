@@ -6,9 +6,10 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from .models import Program, FunctionalArea, Employee, BugReport
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.utils import timezone
 from django import forms
+import os
 
 
 def set_user_session(request, contextDict):
@@ -81,6 +82,24 @@ def dashboard(request):
         if reportedBy and reportedBy != 'Any Employee':
             bugReports = bugReports.filter(reportedBy=reportedBy)
 
+        
+        # Filter by assigned to
+        assignedTo = form.cleaned_data.get('assignedTo')
+        if assignedTo and assignedTo != 'Any Employee':
+            bugReports = bugReports.filter(assignedTo=assignedTo)
+
+        # Filter by status
+        status = form.cleaned_data.get('status')
+        if status and status != 'Select':
+            bugReports = bugReports.filter(status=status)
+        else:
+            l = []
+            for bugReport in bugReports:
+                if bugReport.status != 'Closed':
+                    l.append(bugReport)
+            bugReports = l
+
+
         '''
         # Filter by report type
         reportType = form.cleaned_data.get('reportType')
@@ -94,21 +113,10 @@ def dashboard(request):
         if functionalArea:
             bugReports = bugReports.filter(functionalArea=functionalArea)
         
-        # Filter by status
-        status = form.cleaned_data.get('status')
-        if status:
-            bugReports = bugReports.filter(status=status)
-        
         # Filter by priority
         priority = form.cleaned_data.get('priority')
         if priority:
             bugReports = bugReports.filter(priority=priority)
-
-
-        # Filter by assigned to
-        assignedTo = form.cleaned_data.get('assignedTo')
-        if assignedTo:
-            bugReports = bugReports.filter(assignedTo=assignedTo)
 
         # Filter by resolved by
         resolvedBy = form.cleaned_data.get('resolvedBy')
@@ -137,7 +145,7 @@ def control_form_visibility(form, request):
         form.fields['testedOn'].widget = forms.HiddenInput()
         form.fields['isDeferred'].widget = forms.HiddenInput()
     # Un hide this field when attachment is implemented
-    form.fields['attachment'].widget = forms.HiddenInput()
+    # form.fields['attachment'].widget = forms.HiddenInput()
     return form
 
 
@@ -146,7 +154,8 @@ def control_form_visibility(form, request):
 def create_bugreport(request):
     form = CreateBugReportForm()
     if request.method == 'POST':
-        form = CreateBugReportForm(request.POST)
+        print(request.FILES)
+        form = CreateBugReportForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect("dashboard")
@@ -171,7 +180,8 @@ def update_bugreport(request, pk):
     bugReport = BugReport.objects.get(id=pk)
     form = UpdateBugReportForm(instance=bugReport)
     if request.method == 'POST':
-        form = UpdateBugReportForm(request.POST, instance=bugReport)
+        print(request.FILES)
+        form = UpdateBugReportForm(request.POST, request.FILES, instance=bugReport)
         if form.is_valid():
             form.save()
             return redirect("dashboard")
@@ -181,10 +191,28 @@ def update_bugreport(request, pk):
     return render(request, 'webapp/update_bugreport.html', context=context)
 
 
+# View Attachment
+@login_required(login_url='login')
+def view_attachment(request, pk):
+    bugReport = BugReport.objects.get(id=pk)
+    file_path = bugReport.attachment.path
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as fh:
+                response = HttpResponse(fh.read(), content_type="application/octet-stream")
+                response['Content-Disposition'] = 'attachment; filename=' + os.path.basename(file_path)
+                return response
+    else:
+        raise Http404("The requested file does not exist.")
+
+
 # Delete a Bug report
 @login_required(login_url='login')
 def delete_bugreport(request, pk):
     bugReport = BugReport.objects.get(id=pk)
+    if bugReport.attachment:
+        file_path = bugReport.attachment.path
+        if os.path.isfile(file_path):
+            os.remove(file_path)
     bugReport.delete()
     context = {}
 #    context = set_user_session(request, context)

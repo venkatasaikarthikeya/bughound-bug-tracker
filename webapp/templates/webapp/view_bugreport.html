@@ -10,8 +10,6 @@
 
             &nbsp;  &nbsp; 
 
-            {{bugReport.program}}
-
             {{bugReport.problemSummary}}
 
         </strong>
@@ -22,13 +20,79 @@
 
             <p> <strong> ID:  </strong> {{bugReport.id}} </p> 
 
-            <p> <strong> PROGRAM:  </strong> {{bugReport.program}} </p> 
+            <p> <strong> Program:  </strong> {{bugReport.program}} </p> 
 
-            <p> <strong> SUMMARY:  </strong> {{bugReport.problemSummary}} </p>
+            <p> <strong> Report type:  </strong> {{bugReport.reportType}} </p> 
 
-            <p> <strong> STATUS:  </strong> {{bugReport.status}} </p>
+            <p> <strong> Severity:  </strong> {{bugReport.severity}} </p> 
 
-            <p> <strong> REPORTED BY:  </strong> {{bugReport.reportedBy}} </p>
+            <p> <strong> Problem:  </strong> {{bugReport.problem}} </p> 
+
+            <p> <strong> Reproducible:  </strong> {{bugReport.isReproducible}} </p> 
+
+            {% if bugReport.attachment %}
+
+                <p> <strong> Attachment:  </strong> {{bugReport.fetch_attachment_name}} </p>
+
+            {% endif %}
+
+            <p> <strong> Reported By:  </strong> {{bugReport.reportedBy}} </p>
+
+            <p> <strong> Reported On:  </strong> {{bugReport.reportedOn}} </p>
+
+            {% if bugReport.suggestedFix %}
+
+                <p> <strong> Suggested Fix:  </strong> {{bugReport.suggestedFix}} </p>
+
+            {% endif %}
+
+            {% if bugReport.functionalArea %}
+
+                <p> <strong> Functional Area:  </strong> {{bugReport.functionalArea}} </p>
+
+            {% endif %}
+
+            {% if bugReport.assignedTo %}
+
+                <p> <strong> Assigned To:  </strong> {{bugReport.assignedTo}} </p>
+
+            {% endif %}
+
+            {% if bugReport.status and bugReport.status != 'Select' %}
+
+                <p> <strong> Status:  </strong> {{bugReport.status}} </p>
+
+            {% endif %}
+
+            {% if bugReport.priority %}
+
+                <p> <strong> Priority:  </strong> {{bugReport.priority}} </p>
+
+            {% endif %}
+
+            {% if bugReport.comments %}
+
+                <p> <strong> Comments:  </strong> {{bugReport.comments}} </p>
+
+            {% endif %}
+
+            {% if bugReport.resolution %}
+
+                <p> <strong> Resolution:  </strong> {{bugReport.resolution}} </p>
+
+            {% endif %}
+
+            {% if bugReport.resolvedBy %}
+
+                <p> <strong> Resolved By:  </strong> {{bugReport.resolvedBy}} </p>
+
+            {% endif %}
+
+            {% if bugReport.testedBy %}
+
+                <p> <strong> Tested By:  </strong> {{bugReport.testedBy}} </p>
+
+            {% endif %}
 
         </div>
 
@@ -41,6 +105,16 @@
     &nbsp;
 
     <a href="{% url 'update_bugreport' bugReport.id %}" class="btn btn-info"> Update </a>
+
+    &nbsp;
+
+    {% if bugReport.attachment %}
+    
+        &nbsp;
+
+        <a href="{% url 'view_attachment' bugReport.id %}" class="btn btn-secondary"> View Attachment </a>
+    
+    {% endif %}
 
     {% if currentEmployee.level == '3' %}
     

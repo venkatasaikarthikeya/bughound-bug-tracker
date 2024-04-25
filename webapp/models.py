@@ -29,6 +29,7 @@ severities = [
 
 # [Pending, Fixed, Cannot be reproduced, Deferred, As designed, Withdrawn by reporter, Need more info, Disagree with suggestion, Duplicate]
 resolutions = [
+    ('Select', 'Select'),
     ('Pending', 'Pending'),
     ('Fixed', 'Fixed'),
     ('Cannot be reproduced', 'Cannot be reproduced'),
@@ -42,6 +43,7 @@ resolutions = [
 
 # [Open, Resolved, Closed]
 statuses = [
+    ('Select', 'Select'),
     ('Open', 'Open'),
     ('Resolved', 'Resolved'),
     ('Closed', 'Closed')
@@ -49,6 +51,7 @@ statuses = [
 
 # [Fix immediately, Fix as soon as possible, Fix before next milestone, Fix before release, Fix if possible, Optional]
 priorities = [
+    ('Select', 'Select'),
     ('Fix immediately', 'Fix immediately'),
     ('Fix as soon as possible', 'Fix as soon as possible'),
     ('Fix before next milestone', 'Fix before next milestone'),
@@ -110,7 +113,7 @@ class BugReport(models.Model):
 
     severity = models.CharField(max_length=100, choices=severities)
 
-    attachment = models.CharField(max_length=100)
+    attachment = models.FileField(upload_to='uploads/', blank=True, null=True)
 
     problemSummary = models.TextField()
 
@@ -150,3 +153,6 @@ class BugReport(models.Model):
 
     def __str__(self):
         return self.program.name + '-' + self.reportType + '-' + self.problemSummary
+    
+    def fetch_attachment_name(self):
+        return self.attachment.path.split('/')[-1]
